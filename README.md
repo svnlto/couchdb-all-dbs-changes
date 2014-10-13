@@ -24,3 +24,7 @@ allDBsChangesPool.start(couch_url, function (err, pool) {
 
 ```
 
+### todos:
+
+* request queue
+* pass through options to changes feed.
