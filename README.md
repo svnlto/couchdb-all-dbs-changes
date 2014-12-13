@@ -1,4 +1,4 @@
-# all-dbs-changes
+# couchdb-all-dbs-changes
 
 EventEmitter on _all_dbs
 
