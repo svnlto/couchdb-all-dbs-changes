@@ -23,5 +23,4 @@ readable stream on couchdb' _all_dbs
 
 ### todos:
 
-* request queue
 * pass through options to changes feed.
