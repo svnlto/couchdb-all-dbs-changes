@@ -17,13 +17,13 @@ util.inherits(Changes, Readable);
 
 Changes.prototype._read = function () {
 
-  feed.create(this.options.url, function (err, pool) {
+  feed.create(this.options.url, function (err, change) {
 
     if (err) {
       this.emit('error', err);
     }
 
-    this.emit('data', pool);
+    this.emit('data', change);
     this.emit(null);
 
   }.bind(this));
