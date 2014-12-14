@@ -1,31 +1,33 @@
 'use strict';
 
-var changes = require('./lib/changes');
-var events = require('events');
+var feed = require('./lib/changes');
+var util = require('util');
+var stream = require('stream');
 
-exports.start = function (couch_url, callback) {
-  var ev = new events.EventEmitter();
-  var dbPool = {};
+var Readable = stream.Readable;
 
-  dbPool.on = function () {
-    return ev.on.apply(ev, arguments);
-  };
+var Changes = function (options) {
 
-  dbPool.emit = function () {
-    return ev.emit.apply(ev, arguments);
-  };
+  this.options = options || {};
 
-  changes.create(couch_url, function (err, pool) {
+  Readable.call(this, this.options);
+};
+
+util.inherits(Changes, Readable);
+
+Changes.prototype._read = function () {
+
+  feed.create(this.options.url, function (err, pool) {
 
     if (err) {
-      return callback(err);
+      this.emit('error', err);
     }
 
-    dbPool.emit('data', pool);
+    this.emit('data', pool);
+    this.emit(null);
 
-  });
-
-  return callback(null, dbPool);
+  }.bind(this));
 
 };
 
+module.exports = Changes;

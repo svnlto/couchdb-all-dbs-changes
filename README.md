@@ -1,26 +1,23 @@
 # couchdb-all-dbs-changes
 
-EventEmitter on _all_dbs
+readable stream on couchdb' _all_dbs
 
 ```js
 
-var allDBsChangesPool = require('all-dbs-changes');
-var couch_url = 'http://localhost:5984';
+  var couch_url = 'http://localhost:5984';
+  var ChangesFeed = require('./index');
 
-allDBsChangesPool.start(couch_url, function (err, pool) {
-
-  if (err) {
-    console.log(err);
-  }
-
-  pool.on('data', function (db) {
-    db.data.results.forEach(function (result) {
-      /.../
-    });
-
+  var feed = new ChangesFeed({
+    url: couch_url
   });
 
-});
+  feed.on('data', function (a) {
+    /.../
+  });
+
+  feed.on('error', function (err) {
+    /.../
+  });
 
 ```
 
