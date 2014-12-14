@@ -13,7 +13,7 @@ allDBsChangesPool.start(couch_url, function (err, pool) {
     console.log(err);
   }
 
-  pool.on('change', function (db) {
+  pool.on('data', function (db) {
     db.data.results.forEach(function (result) {
       /.../
     });

@@ -21,7 +21,7 @@ exports.start = function (couch_url, callback) {
       return callback(err);
     }
 
-    dbPool.emit('change', pool);
+    dbPool.emit('data', pool);
 
   });
 
