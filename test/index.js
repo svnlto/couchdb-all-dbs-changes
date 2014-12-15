@@ -1,63 +1,34 @@
  'use strict';
 
 var couchr = require('couchr');
-var utils = require('./lib/utils');
 var async = require('async');
-var path = require('path');
 var url = require('url');
-var urlFormat = url.format;
-var urlParse = url.parse;
 
-var changesFeed = require('../');
-
-
-var COUCH = {
-  user: 'admin',
-  pass: 'password',
-  url: 'http://localhost:8985',
-  data_dir: path.resolve() + '/data'
-};
-
-var DEFAULT_OPTIONS = {
-  couchdb: COUCH
-};
+var ChangesFeed = require('../');
 
 describe('all dbs changes feed', function () {
 
-  beforeEach(function (done) {
-
+  before(function (done) {
     var self = this;
-    utils.setupCouch(COUCH, function (err, couch) {
+    var host = 'http://127.0.0.1:5984';
 
-      if (err) {
-        return done(err);
-      }
 
-      self.couch = couch;
+    this.db_path = url.resolve(host, 'a');
 
-      var base = url.parse(COUCH.url);
-      base.auth = COUCH.user + ':' + COUCH.pass;
-      base = url.format(base);
-
-      self.base_url = base;
-
-      async.series([
-        async.apply(couchr.put, url.resolve(base, 'a'))
-      ],
-      function (err, res) {
-        done();
-      });
-
+    async.series([
+      async.apply(couchr.put, this.db_path)
+    ],
+    function (err, res) {
+      done();
     });
 
   });
 
-  afterEach(function (done) {
-    utils.stopCouch(COUCH, this.couch, done);
+  beforeEach(function () {
   });
 
   it('set up listener', function (done) {
-    done();
+
   });
 
 });
