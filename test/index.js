@@ -29,6 +29,10 @@ describe('all dbs changes feed', function () {
     });
   });
 
+  it('should provide a constructor', function () {
+    expect(feed instanceof ChangesFeed).to.be.ok();
+  });
+
   it('should expose a readable stream', function () {
     expect(feed.readable).to.be.ok();
   });
