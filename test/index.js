@@ -12,14 +12,13 @@ var expect = require('expect.js');
 var ChangesFeed = require('../');
 var host = 'http://127.0.0.1:5984';
 
-var feed = new ChangesFeed({
-  url: host
-});
-
 describe('all dbs changes feed', function () {
 
   before(function (done) {
     this.db_path = url.resolve(host, 'a');
+    this.feed = new ChangesFeed({
+      url: host
+    });
 
     async.series([
       async.apply(couchr.put, this.db_path)
@@ -30,11 +29,17 @@ describe('all dbs changes feed', function () {
   });
 
   it('should provide a constructor', function () {
-    expect(feed instanceof ChangesFeed).to.be.ok();
+    expect(this.feed instanceof ChangesFeed).to.be.ok();
   });
 
   it('should expose a readable stream', function () {
-    expect(feed.readable).to.be.ok();
+    expect(this.feed.readable).to.be.ok();
+  });
+
+  it('should post a doc and trigger a change on the feed', function () {
+    // create feed listener
+    //  post doc to db
+    //   see change come in through stream
   });
 
 });

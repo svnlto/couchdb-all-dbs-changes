@@ -10,6 +10,10 @@ var Changes = function (options) {
 
   this.options = options || {};
 
+  if (options && !options.url) {
+    throw new Error('url parameter required');
+  }
+
   Readable.call(this, this.options);
 };
 
