@@ -1,6 +1,6 @@
 {
   "name": "couchdb-all-dbs-changes",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "read stream changes feed for CouchDB's _all_dbs Database.",
   "main": "index.js",
   "scripts": {
