@@ -1,7 +1,7 @@
 {
   "name": "couchdb-all-dbs-changes",
   "version": "0.5.0",
-  "description": "Changes feed for CouchDB's _all_dbs Database.",
+  "description": "read stream changes feed for CouchDB's _all_dbs Database.",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/index.js"
