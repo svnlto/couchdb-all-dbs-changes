@@ -12,9 +12,11 @@ var Feed = function (options) {
     throw new Error('url parameter required');
   }
 
+  options.interval = this.options.interval || 500;
+
   events.EventEmitter.call(this);
 
-  changes.create(this.options.url, function (err, pool) {
+  changes.create(options, function (err, pool) {
 
     if (err) {
       this.emit('error', err);
