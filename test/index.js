@@ -1,62 +1,68 @@
- 'use strict';
+ /* global require, describe, before, it*/
+
+'use strict';
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
 var couchr = require('couchr');
-var utils = require('./lib/utils');
 var async = require('async');
-var path = require('path');
 var url = require('url');
-var urlFormat = url.format;
-var urlParse = url.parse;
+var expect = require('expect.js');
 
-var changesFeed = require('../');
-
-
-var COUCH = {
-  user: 'admin',
-  pass: 'password',
-  url: 'http://localhost:8985',
-  data_dir: path.resolve() + '/data'
-};
-
-var DEFAULT_OPTIONS = {
-  couchdb: COUCH
-};
+var ChangesFeed = require('../');
+var host = 'http://127.0.0.1:5984';
 
 describe('all dbs changes feed', function () {
 
-  beforeEach(function (done) {
-
+  before(function (done) {
     var self = this;
-    utils.setupCouch(COUCH, function (err, couch) {
 
-      if (err) {
-        return done(err);
-      }
+    this.db_path = url.resolve(host, 'a');
 
-      self.couch = couch;
+    this.change = null;
+    this.error = null;
 
-      var base = url.parse(COUCH.url);
-      base.auth = COUCH.user + ':' + COUCH.pass;
-      base = url.format(base);
-
-      self.base_url = base;
-
-      async.series([
-        async.apply(couchr.put, url.resolve(base, 'a'))
-      ],
-      function (err, res) {
-        done();
+    async.series([
+      async.apply(couchr.put, this.db_path)
+    ],
+    function () {
+      self.feed = new ChangesFeed({
+        url: host
       });
 
+      done();
     });
-
   });
 
-  afterEach(function (done) {
-    utils.stopCouch(COUCH, this.couch, done);
+  beforeEach(function () {
+    this.feed.on('change', function (change) {
+      this.change = change;
+    }.bind(this));
+
+    this.feed.on('error', function (error) {
+      this.error = error;
+    });
   });
 
-  it('set up listener', function (done) {
+  it('should provide a constructor', function () {
+    expect(this.feed instanceof ChangesFeed).to.be.ok();
+  });
+
+  it('should implement an even emitter', function () {
+    expect(this.feed.on).to.be.ok();
+  });
+
+  it('should post a doc and trigger a change on the feed', function (done) {
+      couchr.post(this.db_path, {
+        name: 'test_doc'
+      }, function (err, resp) {
+        console.log(this.change, this.error);
+        done();
+      }.bind(this));
+  });
+
+  it('should', function (done) {
+    this.timeout(5000);
     done();
   });
 

@@ -2,30 +2,31 @@
 
 var changes = require('./lib/changes');
 var events = require('events');
+var util = require('util');
 
-exports.start = function (couch_url, callback) {
-  var ev = new events.EventEmitter();
-  var dbPool = {};
+var Feed = function (options) {
 
-  dbPool.on = function () {
-    return ev.on.apply(ev, arguments);
-  };
+  this.options = options || {};
 
-  dbPool.emit = function () {
-    return ev.emit.apply(ev, arguments);
-  };
+  if (options && !options.url) {
+    throw new Error('url parameter required');
+  }
 
-  changes.create(couch_url, function (err, pool) {
+  events.EventEmitter.call(this);
+
+  changes.create(this.options.url, function (err, pool) {
 
     if (err) {
-      return callback(err);
+      this.emit('error', err);
     }
 
-    dbPool.emit('data', pool);
+    this.emit('change', pool);
 
-  });
-
-  return callback(null, dbPool);
+  }.bind(this));
 
 };
+
+util.inherits(Feed, events.EventEmitter);
+
+module.exports = Feed;
 

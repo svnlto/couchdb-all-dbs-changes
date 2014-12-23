@@ -8,6 +8,8 @@
   },
   "keywords": [
     "couchdb",
+    "events",
+    "emitter",
     "changes",
     "feed",
     "_all_dbs"
