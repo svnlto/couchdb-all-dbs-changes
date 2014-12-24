@@ -1,30 +1,33 @@
-# couchdb-all-dbs-changes
+# couchdb-all-dbs-changes [![Build Status](https://travis-ci.org/svnlto/couchdb-all-dbs-changes.svg)](https://travis-ci.org/svnlto/couchdb-all-dbs-changes)
 
-EventEmitter on _all_dbs
+EventEmitter on \_all_dbs
+
+
+## Install
+
+```js
+$ npm install couchdb-all-dbs-changes
+```
+
+## Usage
 
 ```js
 
-var allDBsChangesPool = require('all-dbs-changes');
+var ChangesFeed = require('couchdb-all-dbs-changes');
 var couch_url = 'http://localhost:5984';
 
-allDBsChangesPool.start(couch_url, function (err, pool) {
-
-  if (err) {
-    console.log(err);
-  }
-
-  pool.on('data', function (db) {
-    db.data.results.forEach(function (result) {
-      /.../
-    });
-
-  });
-
+var feed = new ChangesFeed({
+  url: couch_url,
+  interval: 5000 //optional
 });
 
+feed.on('change', function (change) {
+  console.log(change);
+});
+
+feed.on('error', function (error) {
+  console.log(error);
+});
+
+
 ```
-
-### todos:
-
-* request queue
-* pass through options to changes feed.
