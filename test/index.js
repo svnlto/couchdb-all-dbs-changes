@@ -53,7 +53,7 @@ describe('all dbs changes feed', function () {
 
     couchr.post(this.db_path, doc, function () {
       this.feed.on('change', function (a) {
-        expect(a.name).to.eql('a');
+        expect(a.db).to.eql('a');
         expect(a.doc.name).to.eql(doc.name);
         done();
       });
